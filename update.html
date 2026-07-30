@@ -16,7 +16,7 @@ button { background: #002e5b; color: white; border: none; padding: 15px; width: 
 <div class="box">
 <h3 style="color:#002e5b">Update School Notice</h3>
 <div id="ld" class="last-date">Checking last update...</div>
-<textarea id="msg" rows="6" placeholder="Write new notice here..."></textarea>
+<textarea id="msg" rows="6" placeholder="Yahan naya notice likhein..."></textarea>
 <button id="btn" onclick="update()">SAVE & PUBLISH</button>
 </div>
 
@@ -39,7 +39,7 @@ function update() {
 
   Swal.fire({
     title: 'Publishing...',
-    text: 'Notice updating.....',
+    text: 'Notice update ho raha hai',
     allowOutsideClick: false,
     didOpen: () => { Swal.showLoading(); }
   });
@@ -53,12 +53,12 @@ function update() {
     Swal.fire({
       icon: 'success',
       title: 'Published!',
-      text: 'New notice will be appeared .',
+      text: 'Naya notice sabhi ko dikhne lagega.',
       confirmButtonColor: '#002e5b'
     }).then(() => { location.reload(); });
   })
   .catch(err => {
-    Swal.fire('Error', 'Can't update. Check internet connection.', 'error');
+    Swal.fire('Error', 'Update nahi ho paya. Internet check karein.', 'error');
   });
 }
 </script>
