@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+body { font-family: sans-serif; padding-top: 100px; background: #f0f2f5; text-align: center; margin: 0; }
+.box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width:90%; max-width:400px; margin:auto; border-top: 5px solid #002e5b; }
+textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; }
+button { background: #002e5b; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
+.last-date { font-size: 12px; color: #555; margin-bottom: 15px; background: #eef; padding: 5px; border-radius: 4px; }
+</style>
+</head>
+<body onload="loadCurrent()">
+
+<div class="box">
+<h3 style="color:#002e5b">Update School Notice</h3>
+<div id="ld" class="last-date">Checking last update...</div>
+<textarea id="msg" rows="6" placeholder="Write new notice here..."></textarea>
+<button id="btn" onclick="update()">SAVE & PUBLISH</button>
+</div>
+
+<script>
+// YAHAN APNA WEB APP URL DALEIN
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4iPiMODUoc0RnOpVUU4r40iUFSpGhEwZLPUnS_hdA17XI4mWJJ4J2-534OxCtOxKFeQ/exec";
+
+function loadCurrent() {
+  fetch(WEB_APP_URL + "?action=getNotice")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('ld').innerText = "Pichla update: " + data.date;
+      document.getElementById('msg').value = data.text;
+    });
+}
+
+function update() {
+  var t = document.getElementById('msg').value;
+  if(!t) return Swal.fire('Oops!', 'Kuch toh likhiye!', 'warning');
+
+  Swal.fire({
+    title: 'Publishing...',
+    text: 'Notice updating.....',
+    allowOutsideClick: false,
+    didOpen: () => { Swal.showLoading(); }
+  });
+
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "saveNotice", text: t })
+  })
+  .then(res => res.json())
+  .then(res => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Published!',
+      text: 'New notice will be appeared .',
+      confirmButtonColor: '#002e5b'
+    }).then(() => { location.reload(); });
+  })
+  .catch(err => {
+    Swal.fire('Error', 'Can't update. Check internet connection.', 'error');
+  });
+}
+</script>
+</body>
+</html>
