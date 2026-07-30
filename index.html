@@ -29,42 +29,29 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; 
 </div>
 
 <script>
-// YAHAN APNA PUBLISHED CSV LINK DALEIN
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQdToQFtdZ3lbUCONCj63kjcbefxn4LmPwXGxnmGqO0v9SFBzl8Hlzlnis9mBnNv3xBLskZll15Efsf/pub?output=csv";
+// YAHAN APNA WEB APP URL DALEIN
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw4iPiMODUoc0RnOpVUU4r40iUFSpGhEwZLPUnS_hdA17XI4mWJJ4J2-534OxCtOxKFeQ/exec";
 
 function fetchNotice() {
-  fetch(CSV_URL)
-    .then(res => res.text())
-    .then(csvText => {
-      // CSV Data ko line aur column mein split karna
-      const rows = csvText.trim().split("\n");
-      
-      // Maan rahe hain ki Row 2 (index 1) par latest notice hai.
-      // Column A = Notice, Column B = Date
-      const lastRow = rows[rows.length - 1].split(","); 
-      
-      const noticeText = lastRow[0].replace(/^"|"$/g, ''); // Extra quotes hatane ke liye
-      const noticeDate = lastRow[1] ? lastRow[1].replace(/^"|"$/g, '') : '';
-
+  fetch(WEB_APP_URL + "?action=getNotice")
+    .then(res => res.json())
+    .then(data => {
       document.getElementById('loader').style.display = 'none';
-      document.getElementById('ntc').innerText = noticeText;
-      document.getElementById('dt').innerHTML = `<i class="far fa-clock"></i> Last Updated: ${noticeDate}`;
-      
+      document.getElementById('ntc').innerText = data.text;
+      document.getElementById('dt').innerHTML += data.date;
       document.getElementById('ntc').style.display = 'block';
       document.getElementById('dt').style.display = 'inline-block';
       document.getElementById('spkBtn').style.display = 'inline-block';
     })
     .catch(err => {
       document.getElementById('loader').innerText = "Notice load nahi ho saka.";
-      console.error(err);
     });
 }
 
 function talk() {
   var text = document.getElementById('ntc').innerText;
   var msg = new SpeechSynthesisUtterance();
-  msg.text = text; 
-  msg.lang = 'hi-IN';
+  msg.text = text; msg.lang = 'hi-IN';
   window.speechSynthesis.speak(msg);
 }
 </script>
