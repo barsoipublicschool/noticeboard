@@ -16,7 +16,7 @@ button { background: #002e5b; color: white; border: none; padding: 15px; width: 
 <div class="box">
 <h3 style="color:#002e5b">Update School Notice</h3>
 <div id="ld" class="last-date">Checking last update...</div>
-<textarea id="msg" rows="6" placeholder="Yahan naya notice likhein..."></textarea>
+<textarea id="msg" rows="6" placeholder="Write new notice here..."></textarea>
 <button id="btn" onclick="update()">SAVE & PUBLISH</button>
 </div>
 
@@ -28,7 +28,7 @@ function loadCurrent() {
   fetch(WEB_APP_URL + "?action=getNotice")
     .then(res => res.json())
     .then(data => {
-      document.getElementById('ld').innerText = "Pichla update: " + data.date;
+      document.getElementById('ld').innerText = "Last update: " + data.date;
       document.getElementById('msg').value = data.text;
     });
 }
@@ -39,7 +39,7 @@ function update() {
 
   Swal.fire({
     title: 'Publishing...',
-    text: 'Notice update ho raha hai',
+    text: 'Notice updating....',
     allowOutsideClick: false,
     didOpen: () => { Swal.showLoading(); }
   });
@@ -53,12 +53,12 @@ function update() {
     Swal.fire({
       icon: 'success',
       title: 'Published!',
-      text: 'Naya notice sabhi ko dikhne lagega.',
+      text: 'New notice will be appeared.',
       confirmButtonColor: '#002e5b'
     }).then(() => { location.reload(); });
   })
   .catch(err => {
-    Swal.fire('Error', 'Update nahi ho paya. Internet check karein.', 'error');
+    Swal.fire('Error', 'Can't Update. Check Internet.', 'error');
   });
 }
 </script>
